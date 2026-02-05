@@ -26,22 +26,17 @@
 
 <header class="header">
     <div class="header-content">
-
-        <!-- Логотип -->
         <div class="logo-section">
             <div class="logo-wrapper">
             <img src="{% static 'img/college_logo.png' %}" class="college-logo">
             <div class="logo-placeholder"></div>
         </div>
-
         <div class="college-info">
             <h1 class="college-name">Минский радиотехнический колледж</h1>
             <p class="college-subtitle">Расписание занятий by Кунин Ярослав, 4к9392, v. 1.0</p>
         </div>
     </div>
 
-
-        <!-- Навигация -->
         <nav class="navbar">
             <a href="{% url 'schedule' %}"
                class="nav-link {% if request.path == '/' or 'schedule' in request.path %}active{% endif %}">
@@ -84,12 +79,10 @@
     </div>
 </header>
 
-<!-- Основной контент -->
 <main class="container fade-in">
     {% block content %}{% endblock %}
 </main>
 
-<!-- Футер -->
 <footer class="footer">
     <div class="container text-center">
         <p>© {% now "Y" %} УО "БГУИР" филиал "Минский радиотехнический колледж"</p>
@@ -103,14 +96,12 @@
         gap: 16px;
     }
 
-/* Обёртка, чтобы логотип мог прыгать */
     .logo-wrapper {
         position: relative;
         width: 60px;   /* фиксируем ширину */
         height: 60px;  /* фиксируем высоту */
     }
 
-/* Сам логотип */
     .college-logo {
         position: absolute;
         left: 0;
@@ -120,14 +111,12 @@
         transition: transform 0.25s ease;
     }
 
-/* Невидимый placeholder, который держит место */
     .logo-placeholder {
         width: 60px;
         height: 60px;
         opacity: 0; /* полностью невидим */
     }
 
-/* Эффект приподнимания */
     .logo-wrapper:hover .college-logo {
         transform: translateY(-6px);
     }
@@ -135,7 +124,6 @@
 
 </style>
 
-<!-- Скрипты -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         // Анимация карточек

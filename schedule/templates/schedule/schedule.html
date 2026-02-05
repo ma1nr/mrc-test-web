@@ -4,14 +4,12 @@
 
 {% block content %}
 
-<!-- Фильтры -->
 <div class="filter-card">
     <div class="filter-header">
         <h2 class="filter-title">Расписание занятий</h2>
 
         <form method="get" class="filter-controls">
 
-            <!-- ГРУППЫ -->
             <div class="filter-group">
                 <label class="filter-label">
                     <i class="bi bi-people"></i>
@@ -28,8 +26,7 @@
                     </select>
                     <i class="bi bi-chevron-down"></i>
                 </div>
-            </div>в
-            <!-- РЕЖИМ ДАТЫ -->
+            </div>
             <div class="filter-group">
                 <label class="filter-label">
                     <i class="bi bi-calendar-event"></i>
@@ -66,7 +63,6 @@
     </div>
 </div>
 
-<!-- Основная таблица расписания -->
 <div class="schedule-table-container">
     <div class="day-header mb-4">
         <h3 class="day-name">{{ selected_day_full }} ({{ today_date }})</h3>
@@ -142,9 +138,8 @@
     </div>
 </div>
 
-<!-- CSS -->
 <style>
-/* Стили для таблицы пар */
+
 .schedule-table-container {
     background: white;
     border-radius: var(--border-radius);
@@ -169,17 +164,14 @@
     overflow: hidden;
 }
 
-/* если одна запись в слоте — занимает всё */
 .lesson-part-1 {
     height: 100%;
 }
 
-/* если две — делим пополам */
 .lesson-part-2 {
     height: 50%;
 }
 
-/* на всякий случай, если три */
 .lesson-part-3 {
     height: 33%;
 }
@@ -416,7 +408,6 @@
 }
 
 
-/* Адаптив */
 @media (max-width: 768px) {
 
     .lesson-row {
@@ -450,7 +441,6 @@
 }
 </style>
 
-<!-- JS -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);

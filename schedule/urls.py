@@ -3,8 +3,6 @@ from . import views
 
 urlpatterns = [
     path('', views.schedule_view, name='schedule'),
-
-    # Новые маршруты
     path('teachers/', views.teachers_list, name='teachers'),
     path('teacher/<int:teacher_id>/', views.teacher_detail, name='teacher_detail'),
     path('subjects/', views.subjects_list, name='subjects'),

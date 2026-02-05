@@ -33,7 +33,6 @@ DAYS_MAPPING = {
 
 
 def schedule_view(request):
-    # Локаль
     try:
         locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
     except:
@@ -73,7 +72,6 @@ def schedule_view(request):
 
     schedule_qs = schedule_qs.order_by("time")
 
-    # сортировка половин внутри слота
     duration_order = {'half1': 0, 'full': 1, 'half2': 2}
 
     schedule_table = []
@@ -163,7 +161,7 @@ def teacher_detail(request, teacher_id):
     })
 
 def matrix_view(request):
-    # Локаль
+
     try:
         locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
     except:
@@ -171,7 +169,6 @@ def matrix_view(request):
 
     today = datetime.now() + timedelta(hours=3)
 
-    # выбор даты
     date_mode = request.GET.get("date_mode", "today")
     custom_date = request.GET.get("custom_date")
 
@@ -184,7 +181,6 @@ def matrix_view(request):
     else:
         selected_date = today
 
-    # определяем день недели
     selected_day = DAYS_MAPPING.get(selected_date.strftime('%A').capitalize(), "Пн")
 
     groups = Group.objects.all().order_by('name')

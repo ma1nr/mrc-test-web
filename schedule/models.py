@@ -30,7 +30,6 @@ class Group(models.Model):
         return self.name
 
 
-# schedule/models.py - измени модель Schedule:
 class Schedule(models.Model):
     DAYS = [
         ('Пн', 'Понедельник'),
@@ -56,10 +55,8 @@ class Schedule(models.Model):
         default='full'
     )
 
-    # старое поле time оставляем для совместимости
     time = models.TimeField()
 
-    # новые поля
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
 
