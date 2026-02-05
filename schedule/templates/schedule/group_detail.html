@@ -1,0 +1,107 @@
+{% extends 'schedule/base.html' %}
+
+{% block title %}Группа {{ group.name }}{% endblock %}
+
+{% block content %}
+
+<div class="teacher-header">
+    <div class="teacher-profile">
+        <div class="teacher-avatar-large">
+            <i class="bi bi-people-fill"></i>
+        </div>
+
+        <div class="teacher-main-info">
+            <h1>{{ group.name }}</h1>
+            <p class="teacher-title">Учебная группа</p>
+
+            <div class="teacher-stats">
+                <div class="stat-item">
+                    <i class="bi bi-mortarboard"></i>
+                    <span>Специальность: <strong>{{ group.specialty }}</strong></span>
+                </div>
+
+                {% if group.curator %}
+                <div class="stat-item">
+                    <i class="bi bi-person-badge"></i>
+                    <span>
+                        Куратор:
+                        <a href="{% url 'teacher_detail' group.curator.id %}">
+                            {{ group.curator.name }}
+                        </a>
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="filter-card">
+    <h2 class="filter-title">Расписание группы</h2>
+</div>
+
+{% if schedule_by_day %}
+    {% for day, lessons in schedule_by_day.items %}
+    <div class="schedule-day">
+        <div class="day-header">
+            <h3 class="day-name">{{ day }}</h3>
+        </div>
+
+        <div class="lessons-grid">
+            {% for lesson in lessons %}
+            <div class="lesson-card">
+                <span class="lesson-time">{{ lesson.time|time:"H:i" }}</span>
+
+                <h4 class="lesson-subject">{{ lesson.subject.title }}</h4>
+
+                <div class="lesson-meta">
+
+                    <div class="meta-item">
+                        <i class="bi bi-person"></i>
+                        <span>
+                            Преподаватель:
+                            <a href="{% url 'teacher_detail' lesson.teacher.id %}">
+                                {{ lesson.teacher.name }}
+                            </a>
+                        </span>
+                    </div>
+
+                    <div class="meta-item">
+                        <i class="bi bi-clock"></i>
+                        <span>
+                            {% if lesson.duration == 'half1' %}
+                                1 половина
+                            {% elif lesson.duration == 'half2' %}
+                                2 половина
+                            {% else %}
+                                Полная пара
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    {% if lesson.get_classroom_full %}
+                    <div class="meta-item">
+                        <i class="bi bi-geo-alt"></i>
+                        <span>{{ lesson.get_classroom_full }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+    {% endfor %}
+{% else %}
+<div class="empty-state">
+    <i class="bi bi-calendar-x"></i>
+    <h3>Расписание отсутствует</h3>
+</div>
+{% endif %}
+
+<a href="{% url 'groups' %}" class="back-btn">
+    <i class="bi bi-arrow-left"></i>
+    Вернуться к списку групп
+</a>
+
+{% endblock %}

@@ -1,0 +1,249 @@
+{% extends 'schedule/base.html' %}
+
+{% block title %}Матрица расписания{% endblock %}
+
+{% block content %}
+
+<div class="filter-card">
+    <h2 class="filter-title">Матрица расписания (группы × пары)</h2>
+
+    <form method="get" class="date-filter">
+
+        <div class="date-buttons">
+
+        <!-- СЕГОДНЯ -->
+            <button type="submit" name="date_mode" value="today"
+                onclick="document.getElementById('custom-date-block').remove()"
+                class="date-btn {% if date_mode == 'today' %}active{% endif %}">
+                Сегодня
+            </button>
+
+        <!-- ЗАВТРА -->
+            <button type="submit" name="date_mode" value="tomorrow"
+                onclick="document.getElementById('custom-date-block').remove()"
+                class="date-btn {% if date_mode == 'tomorrow' %}active{% endif %}">
+                Завтра
+            </button>
+
+        <!-- КАСТОМ -->
+            <button type="button"
+                onclick="document.getElementById('custom-date-block').style.display='block'"
+                class="date-btn {% if date_mode == 'custom' %}active{% endif %}">
+                Выбрать дату
+            </button>
+
+        </div>
+
+    <!-- БЛОК КАСТОМА -->
+        <div id="custom-date-block" style="margin-top:10px; {% if date_mode != 'custom' %}display:none{% endif %}">
+            <input type="hidden" name="date_mode" value="custom">
+
+            <input type="date" id="custom_date_input" name="custom_date"
+                value="{{ custom_date }}" class="date-input">
+
+            <button type="submit" class="apply-btn">
+                Применить
+            </button>
+        </div>
+
+        <div class="selected-date">
+            Дата: <strong>{{ selected_date }}</strong> ({{ selected_day_full }})
+        </div>
+
+    </form>
+
+
+
+</div>
+
+<table class="schedule-matrix">
+    <thead>
+        <tr>
+            <th>Группа</th>
+            {% for slot in matrix.0.slots %}
+            <th>
+                {{ slot.num }} пара<br>
+                {{ slot.start|time:"H:i" }}–{{ slot.end|time:"H:i" }}
+            </th>
+            {% endfor %}
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for row in matrix %}
+        <tr>
+            <td>
+                <a href="{% url 'group_detail' row.group.id %}">
+                    {{ row.group.name }}
+                </a>
+            </td>
+
+            {% for slot in row.slots %}
+            <td>
+                <div class="matrix-cell">
+
+                    {% if slot.lessons|length == 0 %}
+                        <div class="matrix-lesson matrix-lesson-1 matrix-empty">
+                            Нет занятия
+                        </div>
+
+                    {% elif slot.lessons|length == 1 and slot.lessons.0.duration == "full" %}
+                        <div class="matrix-lesson matrix-lesson-1">
+                            <a href="{% url 'subject_detail' slot.lessons.0.subject.id %}">
+                                {{ slot.lessons.0.subject.title }}
+                            </a><br>
+                            <a href="{% url 'teacher_detail' slot.lessons.0.teacher.id %}">
+                                {{ slot.lessons.0.teacher.name }}
+                            </a><br>
+                            {{ slot.lessons.0.get_classroom_full }}
+                        </div>
+
+                    {% elif slot.lessons|length == 1 and slot.lessons.0.duration == "half1" %}
+                        <div class="matrix-lesson matrix-lesson-2">
+                            <a href="{% url 'subject_detail' slot.lessons.0.subject.id %}">
+                                {{ slot.lessons.0.subject.title }}
+                            </a><br>
+                            <a href="{% url 'teacher_detail' slot.lessons.0.teacher.id %}">
+                                {{ slot.lessons.0.teacher.name }}
+                            </a><br>
+                            {{ slot.lessons.0.get_classroom_full }}
+                        </div>
+                        <div class="matrix-lesson matrix-lesson-2 matrix-empty">
+                            Нет занятия
+                        </div>
+
+                    {% elif slot.lessons|length == 1 and slot.lessons.0.duration == "half2" %}
+                        <div class="matrix-lesson matrix-lesson-2 matrix-empty">
+                            Нет занятия
+                        </div>
+                        <div class="matrix-lesson matrix-lesson-2">
+                            <a href="{% url 'subject_detail' slot.lessons.0.subject.id %}">
+                                {{ slot.lessons.0.subject.title }}
+                            </a><br>
+                            <a href="{% url 'teacher_detail' slot.lessons.0.teacher.id %}">
+                                {{ slot.lessons.0.teacher.name }}
+                            </a><br>
+                            {{ slot.lessons.0.get_classroom_full }}
+                        </div>
+
+                    {% elif slot.lessons|length == 2 %}
+                        {% for lesson in slot.lessons %}
+                        <div class="matrix-lesson matrix-lesson-2">
+                            <a href="{% url 'subject_detail' lesson.subject.id %}">
+                                {{ lesson.subject.title }}
+                            </a><br>
+                            <a href="{% url 'teacher_detail' lesson.teacher.id %}">
+                                {{ lesson.teacher.name }}
+                            </a><br>
+                            {{ lesson.get_classroom_full }}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<style>
+
+.apply-btn {
+    padding: 8px 14px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.apply-btn:hover {
+    background: var(--primary-dark);
+}
+
+.date-filter {
+    margin-bottom: 20px;
+}
+
+.date-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.date-btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    background: var(--bg-gray);
+    cursor: pointer;
+}
+
+.date-btn.active {
+    background: var(--accent);
+    color: white;
+}
+
+.date-input {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.selected-date {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.schedule-matrix {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.schedule-matrix th,
+.schedule-matrix td {
+    border: 1px solid #dee2e6;
+    padding: 8px;
+    vertical-align: top;
+    text-align: left;
+}
+
+.matrix-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    height: 100%;
+}
+
+.matrix-lesson {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-size: 13px;
+}
+
+.matrix-lesson-1 {
+    height: 100%;
+}
+
+.matrix-lesson-2 {
+    height: 50%;
+}
+
+.matrix-empty {
+    background: #f1f3f5;
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+
+{% endblock %}

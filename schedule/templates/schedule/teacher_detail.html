@@ -1,0 +1,115 @@
+{% extends 'schedule/base.html' %}
+
+{% block title %}{{ teacher.name }} - Преподаватель{% endblock %}
+
+{% block content %}
+
+<div class="teacher-header">
+    <div class="teacher-profile">
+        <div class="teacher-avatar-large">
+            <i class="bi bi-person-circle"></i>
+        </div>
+
+        <div class="teacher-main-info">
+            <h1>{{ teacher.name }}</h1>
+            <p class="teacher-title">Преподаватель</p>
+
+            <div class="teacher-stats">
+                <div class="stat-item">
+                    <i class="bi bi-calendar-week"></i>
+                    <span>{{ teacher.schedule_set.count }} занятий в неделю</span>
+                </div>
+
+                <div class="stat-item">
+                    <i class="bi bi-people"></i>
+                    <span>{{ teacher.schedule_set.values_list|length }} групп</span>
+                </div>
+            </div>
+
+            {% if teacher.curated_groups.all %}
+            <div class="teacher-stats" style="margin-top:15px;">
+                <div class="stat-item">
+                    <i class="bi bi-person-badge"></i>
+                    <span>Куратор групп:</span>
+                </div>
+            </div>
+
+            <ul>
+                {% for group in teacher.curated_groups.all %}
+                <li>
+                    <a href="{% url 'group_detail' group.id %}">
+                        {{ group.name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="filter-card">
+    <h2 class="filter-title">Расписание преподавателя</h2>
+</div>
+
+{% if schedule_by_day %}
+    {% for day, lessons in schedule_by_day.items %}
+    <div class="schedule-day">
+        <div class="day-header">
+            <h3 class="day-name">{{ day }}</h3>
+        </div>
+
+        <div class="lessons-grid">
+            {% for lesson in lessons %}
+            <div class="lesson-card">
+                <span class="lesson-time">{{ lesson.time|time:"H:i" }}</span>
+
+                <h4 class="lesson-subject">{{ lesson.subject.title }}</h4>
+
+                <div class="lesson-meta">
+
+                    <div class="meta-item">
+                        <i class="bi bi-people"></i>
+                        <span>Группа: <strong>{{ lesson.group.name }}</strong></span>
+                    </div>
+
+                    <div class="meta-item">
+                        <i class="bi bi-clock"></i>
+                        <span>
+                            {% if lesson.duration == 'half1' %}
+                                1 половина
+                            {% elif lesson.duration == 'half2' %}
+                                2 половина
+                            {% else %}
+                                Полная пара
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    {% if lesson.get_classroom_full %}
+                    <div class="meta-item">
+                        <i class="bi bi-geo-alt"></i>
+                        <span>{{ lesson.get_classroom_full }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+    {% endfor %}
+{% else %}
+<div class="empty-state">
+    <i class="bi bi-calendar-x"></i>
+    <h3>Расписание не найдено</h3>
+    <p>Для этого преподавателя нет занятий</p>
+</div>
+{% endif %}
+
+<a href="{% url 'teachers' %}" class="back-btn">
+    <i class="bi bi-arrow-left"></i>
+    Вернуться к списку преподавателей
+</a>
+
+{% endblock %}

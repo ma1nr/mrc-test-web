@@ -1,0 +1,60 @@
+{% extends 'schedule/base.html' %}
+
+{% block title %}{{ subject.title }} - Предмет{% endblock %}
+
+{% block content %}
+
+<div class="teacher-header">
+    <div class="teacher-profile">
+        <div class="teacher-avatar-large">
+            <i class="bi bi-book"></i>
+        </div>
+
+        <div class="teacher-main-info">
+            <h1>{{ subject.title }}</h1>
+            <p class="teacher-title">Учебный предмет</p>
+
+            <div class="teacher-stats">
+                <div class="stat-item">
+                    <i class="bi bi-people"></i>
+                    <span>{{ groups|length }} групп изучают предмет</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="filter-card">
+    <h2 class="filter-title">Группы, изучающие предмет</h2>
+</div>
+
+<ul class="lessons-grid">
+    {% for group in groups %}
+    <a href="{% url 'group_detail' group.id %}" class="lesson-card" style="text-decoration:none;">
+        <h4 class="lesson-subject">{{ group.name }}</h4>
+
+        <div class="lesson-meta">
+            <div class="meta-item">
+                <i class="bi bi-mortarboard"></i>
+                <span>{{ group.specialty }}</span>
+            </div>
+
+            {% if group.curator %}
+            <div class="meta-item">
+                <i class="bi bi-person-badge"></i>
+                <span>Куратор: {{ group.curator.name }}</span>
+            </div>
+            {% endif %}
+        </div>
+    </a>
+    {% empty %}
+    <p>Нет групп, изучающих этот предмет.</p>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'subjects' %}" class="back-btn">
+    <i class="bi bi-arrow-left"></i>
+    Вернуться к списку предметов
+</a>
+
+{% endblock %}

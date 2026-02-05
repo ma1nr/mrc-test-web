@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Расписание — Колледж{% endblock %}</title>
+
+    {% load static %}
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Основные стили -->
+    <link rel="stylesheet" href="{% static 'schedule/css/style.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+<header class="header">
+    <div class="header-content">
+
+        <!-- Логотип -->
+        <div class="logo-section">
+            <div class="logo-wrapper">
+            <img src="{% static 'img/college_logo.png' %}" class="college-logo">
+            <div class="logo-placeholder"></div>
+        </div>
+
+        <div class="college-info">
+            <h1 class="college-name">Минский радиотехнический колледж</h1>
+            <p class="college-subtitle">Расписание занятий by Кунин Ярослав, 4к9392, v. 1.0</p>
+        </div>
+    </div>
+
+
+        <!-- Навигация -->
+        <nav class="navbar">
+            <a href="{% url 'schedule' %}"
+               class="nav-link {% if request.path == '/' or 'schedule' in request.path %}active{% endif %}">
+                <i class="bi bi-calendar-week"></i>
+                Расписание
+            </a>
+
+            <a href="{% url 'teachers' %}"
+               class="nav-link {% if 'teachers' in request.path %}active{% endif %}">
+                <i class="bi bi-people"></i>
+                Преподаватели
+            </a>
+
+            <a href="{% url 'subjects' %}"
+               class="nav-link {% if 'subjects' in request.path %}active{% endif %}">
+                <i class="bi bi-book"></i>
+                Предметы
+            </a>
+
+            <a href="{% url 'groups' %}"
+               class="nav-link {% if 'groups' in request.path %}active{% endif %}">
+                <i class="bi bi-person-video"></i>
+                Группы
+            </a>
+
+            <a href="{% url 'matrix' %}"
+               class="nav-link {% if 'matrix' in request.path %}active{% endif %}">
+                <i class="bi bi-grid-3x3-gap"></i>
+                Матрица
+            </a>
+
+
+
+            <a href="/admin/" target="_blank" class="nav-link">
+                <i class="bi bi-gear"></i>
+                Админка
+            </a>
+        </nav>
+
+    </div>
+</header>
+
+<!-- Основной контент -->
+<main class="container fade-in">
+    {% block content %}{% endblock %}
+</main>
+
+<!-- Футер -->
+<footer class="footer">
+    <div class="container text-center">
+        <p>© {% now "Y" %} УО "БГУИР" филиал "Минский радиотехнический колледж"</p>
+    </div>
+</footer>
+
+<style>
+   .logo-section {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+/* Обёртка, чтобы логотип мог прыгать */
+    .logo-wrapper {
+        position: relative;
+        width: 60px;   /* фиксируем ширину */
+        height: 60px;  /* фиксируем высоту */
+    }
+
+/* Сам логотип */
+    .college-logo {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 64px;
+        width: auto;
+        transition: transform 0.25s ease;
+    }
+
+/* Невидимый placeholder, который держит место */
+    .logo-placeholder {
+        width: 60px;
+        height: 60px;
+        opacity: 0; /* полностью невидим */
+    }
+
+/* Эффект приподнимания */
+    .logo-wrapper:hover .college-logo {
+        transform: translateY(-6px);
+    }
+
+
+</style>
+
+<!-- Скрипты -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Анимация карточек
+        document.querySelectorAll('.lesson-card').forEach(card => {
+            card.addEventListener('mouseenter', () => card.style.transform = 'translateY(-5px)');
+            card.addEventListener('mouseleave', () => card.style.transform = 'translateY(0)');
+        });
+    });
+</script>
+
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>
