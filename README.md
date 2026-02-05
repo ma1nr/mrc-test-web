@@ -40,24 +40,8 @@ python manage.py runserver
 Ссылка на сайт: http://127.0.0.1:8000/
 Ссылка на админку: http://127.0.0.1:8000/admin/
 
-СТРУКТУРА ПРОЕКТА:
-mrc-test-web/
-│
-├── schedule/              # Основное приложение
-│   ├── templates/         # HTML-шаблоны
-│   ├── static/            # CSS, JS, изображения
-│   ├── models.py          # Модели расписания
-│   ├── views.py           # Логика отображения
-│   ├── urls.py            # Маршруты
-│   └── ...
-│
-├── project/               # Настройки Django
-│   ├── settings.py
-│   ├── urls.py
-│   └── ...
-│
-├── manage.py
-└── db.sqlite3
+<img width="496" height="381" alt="image" src="https://github.com/user-attachments/assets/cb29490f-70b8-468f-84af-bb29a2e04cde" />
+
 
 ИСПОЛЬЗУЕМЫЕ ТЕХНОЛОГИИ:
 Python 3.13
