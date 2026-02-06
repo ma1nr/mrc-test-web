@@ -32,7 +32,7 @@ Linux/Mac: source venv/bin/activate
 python manage.py migrate
 
 5. Создание суперпользователя
-python manage.py createsuperuser
+python manage.py createsuperuser (без этого в админку не зайти по вашему логину!)
 
 6. Запуск сервера
 python manage.py runserver
@@ -44,12 +44,12 @@ python manage.py runserver
 
 
 ИСПОЛЬЗУЕМЫЕ ТЕХНОЛОГИИ:
-Python 3.13
-Django 6
-Bootstrap Icons
-Google Fonts
-Чистый CSS (без фреймворков)
-Адаптивная верстка
+Python 3.13,
+Django 6,
+Bootstrap Icons,
+Google Fonts,
+Чистый CSS (без фреймворков),
+Адаптивная верстка.
 
 ЛИЦЕНЗИЯ:
 MIT License - свободное использование, модификация и распространение.
